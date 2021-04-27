@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameSceneManager : MonoBehaviour
 {
@@ -17,46 +18,80 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField] GameObject ButtonRight;
     [SerializeField] GameObject ButtonLeft;
     [SerializeField] GameObject ButtonJamp;
-    [SerializeField] GameObject Player;
+    [SerializeField] GameObject Fish;
+    [SerializeField] TextMeshProUGUI FishCount;
 
     Rigidbody2D RB;
 
     // Start is called before the first frame update
     void Start()
     {
+        RB = GetComponent<Rigidbody2D>();
     }
 
     //ここに入力する値で調節
     public float Speed;
-    public float JampingPower;
+    public float Gravity;
+    public float JumpingPower;
+    public float JumpPos = 0.0f;
+    public float JumpHeight;
+    public float JumpTime;
+    public float JumpLimitTime;
+
+    public int fishcount;
 
     public bool right = false;
     public bool left = false;
-    public bool jamp = false;
+    public bool jump = false;
     public bool field = false;
+    public bool isjump = false;
 
+    public AnimationCurve jumpCurve;
+    
     //キーボード操作や衝突など毎回チェックがいるものはUpdate
     // Update is called once per frame
     void Update()
     {
-        RB = Player.GetComponent<Rigidbody2D>();
+        float xSpeed = 0.0f;
+        float ySpeed = -Gravity;
         if (right)
         {
-            //Vector2(x,y)orVector3(x,y,z)の順で入れる
-            RB.velocity = new Vector2(Speed, RB.velocity.y);
+            xSpeed = Speed;
         }
         else if (left)
         {
-            RB.velocity = new Vector2(-Speed, RB.velocity.y);
+            xSpeed = -Speed;
         }
-        else if(jamp&&field)
+        else if(jump)
         {
-            RB.velocity = new Vector2(RB.velocity.x,JampingPower);
+            if(field)
+            {
+                ySpeed = JumpingPower;
+                JumpPos = transform.position.y;
+                JumpTime = 0.0f;
+            }
+            if (isjump)
+            {
+                ySpeed *= jumpCurve.Evaluate(JumpTime);
+                bool canTime = JumpLimitTime > JumpTime;
+                if (JumpPos + JumpHeight > transform.position.y&&canTime)
+                {
+                    ySpeed = JumpingPower;
+                    JumpTime += Time.deltaTime;
+                }
+                else
+                {
+                    isjump = false;
+                    JumpTime = 0.0f;
+                }
+                
+            }
         }
         else
         {
-            RB.velocity = Vector2.zero;
+            xSpeed = 0.0f;
         }
+        RB.velocity = new Vector2(xSpeed, ySpeed);
     }
     public void RPushDown()
     {
@@ -76,15 +111,40 @@ public class GameSceneManager : MonoBehaviour
     }
     public void JPushDown()
     {
-        jamp = true;
+        jump = true;
+        isjump = true;
     }
-    public void FieldCheck()
+    public void JPushUp()
     {
-        field = true;
+        jump = false;
+        isjump = false;
+        JumpTime = 0.0f;
     }
 
-    public void GameOver()
+    public void OnCollisionEnter2D(Collision2D coll)
     {
-        SceneManager.LoadScene("Gameover");
+        switch(coll.gameObject.tag)
+        {
+            case "Enemy":
+                SceneManager.LoadScene("GameOver");
+                break;
+            case "Field":
+                field = true;
+                break;
+            case "Fish":
+                Fish.SetActive(false);
+                fishcount++;
+                FishCount.text = "×" + fishcount.ToString();
+                break;
+        }
     }
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag=="Field")
+        {
+            field = false;
+        }
+    }
+
 }
