@@ -18,8 +18,10 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField] GameObject ButtonRight;
     [SerializeField] GameObject ButtonLeft;
     [SerializeField] GameObject ButtonJamp;
-    [SerializeField] GameObject Fish;
     [SerializeField] TextMeshProUGUI FishCount;
+    [SerializeField] GameObject ClearText;
+    [SerializeField] GameObject FirstText;
+    
 
     Rigidbody2D RB;
 
@@ -54,15 +56,19 @@ public class GameSceneManager : MonoBehaviour
     {
         float xSpeed = 0.0f;
         float ySpeed = -Gravity;
-        if (right)
+        if (Input.GetKey(KeyCode.D))
         {
             xSpeed = Speed;
         }
-        else if (left)
+        else if (Input.GetKey(KeyCode.A))
         {
             xSpeed = -Speed;
         }
-        else if(jump)
+        else
+        {
+            xSpeed = 0.0f;
+        }
+        if (jump)
         {
             if(field)
             {
@@ -72,26 +78,25 @@ public class GameSceneManager : MonoBehaviour
             }
             if (isjump)
             {
+                field = false;
                 ySpeed *= jumpCurve.Evaluate(JumpTime);
                 bool canTime = JumpLimitTime > JumpTime;
                 if (JumpPos + JumpHeight > transform.position.y&&canTime)
                 {
                     ySpeed = JumpingPower;
                     JumpTime += Time.deltaTime;
-                }
-                else
-                {
-                    isjump = false;
-                    JumpTime = 0.0f;
-                }
-                
+                }                    
+            }
+            else
+            {
+                isjump = false;
             }
         }
-        else
-        {
-            xSpeed = 0.0f;
-        }
         RB.velocity = new Vector2(xSpeed, ySpeed);
+        if(transform.position.x>0)
+        {
+            FirstText.SetActive(false);
+        }
     }
     public void RPushDown()
     {
@@ -118,7 +123,10 @@ public class GameSceneManager : MonoBehaviour
     {
         jump = false;
         isjump = false;
-        JumpTime = 0.0f;
+    }
+    public void ClearButton()
+    {
+        SceneManager.LoadScene("Stage2");
     }
 
     public void OnCollisionEnter2D(Collision2D coll)
@@ -131,20 +139,23 @@ public class GameSceneManager : MonoBehaviour
             case "Field":
                 field = true;
                 break;
-            case "Fish":
-                Fish.SetActive(false);
-                fishcount++;
-                FishCount.text = "×" + fishcount.ToString();
+            case "Clear":
+                if(fishcount==10)
+                {
+                    ClearText.SetActive(true);
+                }
+                break;
+            case "Gameover":
+                SceneManager.LoadScene("Gameover");
                 break;
         }
     }
-
-    public void OnCollisionExit2D(Collision2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag=="Field")
+        if(collision.gameObject.tag=="Fish")
         {
-            field = false;
+            fishcount++;
+            FishCount.text = "×" + fishcount.ToString();           
         }
     }
-
 }

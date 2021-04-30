@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemySnake : MonoBehaviour
 {
-    [SerializeField] GameObject Fish;
-
     public SpriteRenderer sr = null;
     public Rigidbody2D rb = null;
 
@@ -46,16 +44,6 @@ public class EnemySnake : MonoBehaviour
         else
         {
             rb.Sleep();
-        }
-    }
-
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        switch(collision.gameObject.tag)
-        {
-            case "Fish":
-                Fish.SetActive(false);
-                break;
         }
     }
 }
