@@ -9,6 +9,7 @@ TagManager:
   - Fish
   - Clear
   - Gameover
+  - Rose
   layers:
   - Default
   - TransparentFX

@@ -9,11 +9,15 @@ public class GManager : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField] TextMeshProUGUI FishCount;
+    
     [SerializeField] GameObject ClearText;
     [SerializeField] GameObject FirstText;
     [SerializeField] GameObject Player;
+    [SerializeField] GameObject RoseText1;
+    [SerializeField] GameObject RoseText2;
 
     public int fishcount;
+    public float texttime = 0.0f;
     public bool right = false;
     public bool left = false;
     public bool jump = false;
@@ -77,6 +81,30 @@ public class GManager : MonoBehaviour
     public void ClearRecord()
     {
         PlayerPrefs.SetInt("CLEAR", 1);
+    }
+    public void Rose()
+    {
+        if(fishcount==10)
+        {
+            RoseText1.SetActive(true);
+        }
+        else
+        {
+            RoseText2.SetActive(true);
+            texttime += Time.deltaTime;
+            if(Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.D)||texttime>2)
+            {
+                RoseText2.SetActive(false);
+            }
+        }
+    }
+    public void ButtonYes()
+    {
+        fishcount = 0;
+    }
+    public void ButtonNo()
+    {
+        RoseText1.SetActive(false);
     }
 
 }

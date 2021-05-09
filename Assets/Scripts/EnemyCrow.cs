@@ -24,7 +24,7 @@ public class EnemyCrow : MonoBehaviour
         if (sr.isVisible)
         {
             movetime += Time.deltaTime;
-            int xVector = -1;
+            int xVector = 0;
 
             if (movetime <= 2)
             {

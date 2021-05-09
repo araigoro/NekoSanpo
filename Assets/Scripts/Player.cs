@@ -121,9 +121,15 @@ public class Player : MonoBehaviour
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag=="Fish")
+        switch(collision.gameObject.tag)
         {
-            gmanager.fishcount++;   
+            case "Fish":
+                gmanager.fishcount++;
+                break;
+            case "Rose":
+                gmanager.Rose();
+                break;
         }
+        
     }
 }
