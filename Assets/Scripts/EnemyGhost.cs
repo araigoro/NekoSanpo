@@ -45,7 +45,7 @@ public class EnemyGhost : MonoBehaviour
             {
                 Xvector = 1;
                 Yvector = 1;
-                anim.SetBool("rihgt", true);
+                anim.SetBool("right", true);
             }
             else if(movetime>4&&movetime<=8)
             {
@@ -55,8 +55,6 @@ public class EnemyGhost : MonoBehaviour
             else if(movetime>8)
             {
                 movetime = 0.0f;
-                anim.SetBool("right", false);
-                anim.SetBool("left", false);
             }
             rb.velocity = new Vector2(Xvector * speed, Yvector*speed);
         }

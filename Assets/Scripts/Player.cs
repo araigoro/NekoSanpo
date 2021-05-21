@@ -18,12 +18,17 @@ public class Player : MonoBehaviour
     Rigidbody2D RB;
     [SerializeField] GameObject Manager;
     GManager gmanager;
+    Car car;
+
+    GameObject RoseR;
+    GameObject RoseL;
 
     public bool right;
     public bool left;
     public bool jump;
     public bool isjump;
     public bool field = false;
+    public int stageNo;
 
     private Animator anim = null;
 
@@ -33,6 +38,9 @@ public class Player : MonoBehaviour
         RB = GetComponent<Rigidbody2D>();
         gmanager = Manager.GetComponent<GManager>();
         anim = GetComponent<Animator>();
+        RoseR = transform.Find("RoseRight").gameObject;
+        RoseL = transform.Find("RoseLeft").gameObject;
+
     }
 
     //ここに入力する値で調節
@@ -43,7 +51,8 @@ public class Player : MonoBehaviour
     public float JumpHeight;
     public float JumpTime;
     public float JumpLimitTime;
-  
+    public float finishTime;
+
     public AnimationCurve jumpCurve;
     
     //キーボード操作や衝突など毎回チェックがいるものはUpdate
@@ -61,11 +70,21 @@ public class Player : MonoBehaviour
         {
             xSpeed = Speed;
             anim.SetBool("right", true);
+            if (gmanager.rose == true)
+            {
+                RoseR.SetActive(true);
+                RoseL.SetActive(false);
+            }
         }
         else if (Input.GetKey(KeyCode.A))
         {
             xSpeed = -Speed;
             anim.SetBool("left", true);
+            if (gmanager.rose == true)
+            {
+                RoseL.SetActive(true);
+                RoseR.SetActive(false);
+            }
         }
         else
         {
@@ -99,10 +118,10 @@ public class Player : MonoBehaviour
         }
         RB.velocity = new Vector2(xSpeed, ySpeed);
     }
-   
+
     public void OnCollisionEnter2D(Collision2D coll)
     {
-        switch(coll.gameObject.tag)
+        switch (coll.gameObject.tag)
         {
             case "Enemy":
                 gmanager.GameOver();
@@ -111,11 +130,23 @@ public class Player : MonoBehaviour
                 field = true;
                 break;
             case "Clear":
-                gmanager.Cleartext();
-                gmanager.ClearRecord();
+                stageNo = PlayerPrefs.GetInt("Stage", 1);
+                if (stageNo == 1)
+                {
+                    gmanager.Cleartext();
+                    gmanager.ClearRecord();
+                }
+                else if (stageNo == 2)
+                {
+                    gmanager.ClearHeart();
+                }
                 break;
             case "Gameover":
                 gmanager.GameOver();
+                break;
+            case "Car":
+                field = true;
+                transform.SetParent(coll.transform);
                 break;
         }
     }
@@ -131,5 +162,23 @@ public class Player : MonoBehaviour
                 break;
         }
         
+    }
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Rose":
+                gmanager.RoseExit();
+                break;
+        }
+    }
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Car":
+                transform.SetParent(null);
+                break;
+        }
     }
 }

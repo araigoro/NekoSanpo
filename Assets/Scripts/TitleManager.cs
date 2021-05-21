@@ -14,6 +14,7 @@ public class TitleManager : MonoBehaviour
 
     public bool b;
     public int clearstage;
+    public int stageNo;
 
     // Start is called before the first frame update
     void Start()
@@ -56,5 +57,6 @@ public class TitleManager : MonoBehaviour
     public void StageButton(int num)
     {
         SceneManager.LoadScene("Stage" + num);
+        PlayerPrefs.SetInt("Stage", num);
     }
 }

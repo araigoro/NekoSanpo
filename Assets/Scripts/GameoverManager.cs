@@ -22,6 +22,6 @@ public class GameoverManager : MonoBehaviour
     }
     public void ButtonRetry()
     {
-        SceneManager.LoadScene("Stage1");
+        SceneManager.LoadScene("Stage" + PlayerPrefs.GetInt("Stage", 1));
     }
 }
