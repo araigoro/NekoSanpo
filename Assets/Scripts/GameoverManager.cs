@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GameoverManager : MonoBehaviour
 {
+    public AudioSource audiosource;
     // Start is called before the first frame update
     void Start()
     {
-        
+        audiosource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

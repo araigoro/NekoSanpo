@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject Manager;
     GManager gmanager;
     Car car;
-
     GameObject RoseR;
     GameObject RoseL;
 
@@ -38,9 +37,12 @@ public class Player : MonoBehaviour
         RB = GetComponent<Rigidbody2D>();
         gmanager = Manager.GetComponent<GManager>();
         anim = GetComponent<Animator>();
-        RoseR = transform.Find("RoseRight").gameObject;
-        RoseL = transform.Find("RoseLeft").gameObject;
-
+        stageNo = PlayerPrefs.GetInt("Stage", 1);
+        if(stageNo==2)
+        {
+            RoseR = transform.Find("RoseRight").gameObject;
+            RoseL = transform.Find("RoseLeft").gameObject;
+        }    
     }
 
     //ここに入力する値で調節
@@ -130,7 +132,6 @@ public class Player : MonoBehaviour
                 field = true;
                 break;
             case "Clear":
-                stageNo = PlayerPrefs.GetInt("Stage", 1);
                 if (stageNo == 1)
                 {
                     gmanager.Cleartext();
@@ -156,6 +157,7 @@ public class Player : MonoBehaviour
         {
             case "Fish":
                 gmanager.fishcount++;
+                gmanager.FishSE();
                 break;
             case "Rose":
                 gmanager.Rose();

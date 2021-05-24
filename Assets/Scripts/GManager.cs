@@ -18,6 +18,7 @@ public class GManager : MonoBehaviour
     [SerializeField] GameObject RoseOb;
 
     public int fishcount;
+    public int StageNo;
     public float texttime = 0.0f;
     public float finishtime = 0.0f;
     public bool right = false;
@@ -27,9 +28,14 @@ public class GManager : MonoBehaviour
     public bool rose = false;
     public bool clear = false;
 
+    public AudioClip[] SE;
+    private AudioSource audioSource;  
+
     void Start()
     {
         clear = false;
+        audioSource = gameObject.GetComponent<AudioSource>();
+        rose = false;
     }
 
     // Update is called once per frame
@@ -132,6 +138,23 @@ public class GManager : MonoBehaviour
     {
         RoseText1.SetActive(false);
         RoseText2.SetActive(false);
+    }
+    public void FishSE()
+    {
+        audioSource.PlayOneShot(SE[0]);
+    }
+    public void ClearSE()
+    {
+        StageNo = PlayerPrefs.GetInt("Stage,1");
+        switch(StageNo)
+        {
+            case 1:
+                audioSource.PlayOneShot(SE[1]);
+                break;
+            case 2:
+                audioSource.PlayOneShot(SE[2]);
+                break;
+        }
     }
 
 }
