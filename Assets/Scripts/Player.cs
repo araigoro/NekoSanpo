@@ -68,20 +68,22 @@ public class Player : MonoBehaviour
 
         float xSpeed = 0.0f;
         float ySpeed = -Gravity;
-        if (right)
+        if (Input.GetKey(KeyCode.D))
         {
             xSpeed = Speed;
             anim.SetBool("right", true);
+            anim.SetBool("left", false);
             if (gmanager.rose == true)
             {
                 RoseR.SetActive(true);
                 RoseL.SetActive(false);
             }
         }
-        else if (left)
+        else if (Input.GetKey(KeyCode.A))
         {
             xSpeed = -Speed;
             anim.SetBool("left", true);
+            anim.SetBool("right", false);
             if (gmanager.rose == true)
             {
                 RoseL.SetActive(true);
