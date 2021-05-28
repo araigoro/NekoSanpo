@@ -71,8 +71,8 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             xSpeed = Speed;
-            anim.SetBool("right", true);
-            anim.SetBool("left", false);
+            anim.Play("Cat_right", 0, 0.0f);
+            
             if (gmanager.rose == true)
             {
                 RoseR.SetActive(true);
@@ -82,8 +82,8 @@ public class Player : MonoBehaviour
         else if (Input.GetKey(KeyCode.A))
         {
             xSpeed = -Speed;
-            anim.SetBool("left", true);
-            anim.SetBool("right", false);
+            anim.Play("Cat_left", 0, 0.0f);
+            
             if (gmanager.rose == true)
             {
                 RoseL.SetActive(true);
