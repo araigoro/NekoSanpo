@@ -17,8 +17,10 @@ public class Fish : MonoBehaviour
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        //プレイヤーと衝突した場合
         if(collision.gameObject.tag=="Player")
         {
+            //オブジェクトを消す
             FishOb.SetActive(false);
         }
     }

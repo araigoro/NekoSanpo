@@ -19,10 +19,13 @@ public class TitleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //最初はステージ選択を無効に
         Stage1Button.SetActive(false);
         Stage2Button.SetActive(false);
+
         StartButton.SetActive(true);
 
+        //どのステージまでクリアしたかを取得
         clearstage = PlayerPrefs.GetInt("CLEAR", 0);      
     }
 
@@ -32,12 +35,16 @@ public class TitleManager : MonoBehaviour
         
     }
 
+    //スタートボタン処理
     public void Startbutton()
     {
+        //ステージ選択を有効に
         Stage1Button.SetActive(true);
         Stage2Button.SetActive(true);
+
         StartButton.SetActive(false);
 
+        //ステージ１をクリアした場合のみステージ２を選択できるように
         switch (clearstage)
         {
             case 0:
@@ -54,8 +61,11 @@ public class TitleManager : MonoBehaviour
         //Buttonを呼び出すためにはusing UIが必要！
         Stage2Button.GetComponent<Button>().interactable = b;
     }
+
+    //ステージ選択ボタンの処理
     public void StageButton(int num)
     {
+        //選んだステージのシーンをロードし、記録する
         SceneManager.LoadScene("Stage" + num);
         PlayerPrefs.SetInt("Stage", num);
     }

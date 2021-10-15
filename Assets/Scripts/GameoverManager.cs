@@ -9,6 +9,7 @@ public class GameoverManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //コンポーネント取得
         audiosource = gameObject.GetComponent<AudioSource>();
     }
 
@@ -17,10 +18,14 @@ public class GameoverManager : MonoBehaviour
     {
         
     }
+
+    //スタート画面に戻る処理
     public void ButtonStart()
     {
         SceneManager.LoadScene("Title");
     }
+
+    //同じステージを再ロード
     public void ButtonRetry()
     {
         SceneManager.LoadScene("Stage" + PlayerPrefs.GetInt("Stage", 1));

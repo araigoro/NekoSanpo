@@ -14,6 +14,7 @@ public class EnemySnake : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //コンポーネント取得
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -21,11 +22,13 @@ public class EnemySnake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //カメラの範囲内に入ってきた場合
         if(sr.isVisible)
         {
             movetime += Time.deltaTime;
             int xVector = -1;
             
+            //時間経過で動きを変える
             if(movetime<=Random.Range(2.5f,3.5f))
             {
                 xVector = 1;
@@ -39,10 +42,12 @@ public class EnemySnake : MonoBehaviour
                 movetime = 0.0f;
             }
            
+            //動き実行
             rb.velocity = new Vector2(xVector * speed, -gravity);          
         }
         else
         {
+            //カメラ外の時は止めておく
             rb.Sleep();
         }
     }

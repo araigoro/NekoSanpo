@@ -10,19 +10,24 @@ public class CameraManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //ステージ１か２を判別
         StageNo = PlayerPrefs.GetInt("Stage", 1);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Xの位置をキャラクターと合わせて追従するようにする
         transform.position = new Vector3(Player.transform.position.x, 0, -10);
+
+        //0以下の位置（ステージ外・左端）にはいかないようにする
         if (transform.position.x < 0)
         {
             transform.position = new Vector3(0, 0, -10);
         }
         else
         {
+            //ステージ外・右端にいかないようにする
             switch (StageNo)
             {
                 case 1:

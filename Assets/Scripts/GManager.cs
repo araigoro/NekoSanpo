@@ -41,13 +41,18 @@ public class GManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //取得した魚の数を表示
         FishCount.text = "×" + fishcount.ToString();
+
+        //プレイヤーが少し動いたら最初のテキストを消す
         if(Player.transform.position.x>0)
         {
             FirstText.SetActive(false);
         }
+        //クリアした際の処理
         if (clear == true)
         {
+            //2秒後にタイトルに戻る
             finishtime += Time.deltaTime;
             if (finishtime > 2)
             {
@@ -55,11 +60,16 @@ public class GManager : MonoBehaviour
             }
         }
     }
+
+    //クリアボタン処理
     public void ClearButton()
     {
+        //ステージ２をロードかつステージ数を記録
         SceneManager.LoadScene("Stage2");
         PlayerPrefs.SetInt("Stage", 2);
     }
+
+    //クリアテキストの表示
     public void Cleartext()
     {
         if(fishcount==10)
@@ -67,6 +77,8 @@ public class GManager : MonoBehaviour
             ClearText.SetActive(true);
         }     
     }
+
+    //ステージ２のクリア演出
     public void ClearHeart()
     {
         if (rose == true)
@@ -75,10 +87,13 @@ public class GManager : MonoBehaviour
             clear = true;
         }
     }
+    //ゲームオーバー処理
     public void GameOver()
     {
         SceneManager.LoadScene("GameOver");
     }
+
+    //右ボタン処理
     public void RPushDown()
     {
         right = true;
@@ -87,6 +102,8 @@ public class GManager : MonoBehaviour
     {
         right = false;
     }
+
+    //左ボタン処理
     public void LPushDown()
     {
         left = true;
@@ -95,6 +112,7 @@ public class GManager : MonoBehaviour
     {
         left = false;
     }
+    //ジャンプボタン処理
     public void JPushDown()
     {
         jump = true;
@@ -105,10 +123,14 @@ public class GManager : MonoBehaviour
         jump = false;
         isjump = false;
     }
+
+    //クリアしたステージを記録
     public void ClearRecord()
     {
         PlayerPrefs.SetInt("CLEAR", 1);
     }
+
+    //バラの表示
     public void Rose()
     {
         if(fishcount==10)
@@ -120,12 +142,15 @@ public class GManager : MonoBehaviour
             RoseText2.SetActive(true);
         }
     }
+
+    //YESボタン処理
     public void ButtonYes()
     {
         fishcount = 0;
         RoseOb.SetActive(false);
         rose = true;
     }
+    //NOボタン処理
     public void ButtonNo()
     {
         RoseText1.SetActive(false);
@@ -139,12 +164,17 @@ public class GManager : MonoBehaviour
         RoseText1.SetActive(false);
         RoseText2.SetActive(false);
     }
+
+    //魚を取得した際に音を鳴らす
     public void FishSE()
     {
         audioSource.PlayOneShot(SE[0]);
     }
+
+    //クリア時の音を鳴らす
     public void ClearSE()
     {
+        //クリアしたステージによって音を変える
         StageNo = PlayerPrefs.GetInt("Stage,1");
         switch(StageNo)
         {

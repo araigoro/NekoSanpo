@@ -14,6 +14,7 @@ public class EnemyCrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //コンポーネント取得
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
     }

@@ -34,10 +34,15 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //コンポーネント取得
         RB = GetComponent<Rigidbody2D>();
         gmanager = Manager.GetComponent<GManager>();
         anim = GetComponent<Animator>();
+
+        //ステージ判別
         stageNo = PlayerPrefs.GetInt("Stage", 1);
+
+        //ステージ２だった場合取得
         if(stageNo==2)
         {
             RoseR = transform.Find("RoseRight").gameObject;
@@ -61,6 +66,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //GManagerスクリプトの変数を代入
         right = gmanager.right;
         left = gmanager.left;
         jump = gmanager.jump;
@@ -68,23 +74,33 @@ public class Player : MonoBehaviour
 
         float xSpeed = 0.0f;
         float ySpeed = -Gravity;
-        if (right)
+
+        //右移動
+        if (right||Input.GetKey(KeyCode.D))
         {
             xSpeed = Speed;
+
+            //アニメーション設定
             anim.SetBool("right", true);
             anim.SetBool("left", false);
+
+            //バラを取得していた場合
             if (gmanager.rose == true)
             {
                 RoseR.SetActive(true);
                 RoseL.SetActive(false);
             }
         }
-        else if (left)
+        //左移動
+        else if (left||Input.GetKey(KeyCode.A))
         {
             xSpeed = -Speed;
+
+            //アニメーション設定
             anim.SetBool("right", false);
             anim.SetBool("left", true);
 
+            //バラを取得していた場合
             if (gmanager.rose == true)
             {
                 RoseL.SetActive(true);
@@ -97,19 +113,28 @@ public class Player : MonoBehaviour
             anim.SetBool("right", false);
             anim.SetBool("left", false);
         }
+        //ジャンプ処理
         if (jump)
         {
+            //地面に接地していた場合
             if(field)
             {
                 ySpeed = JumpingPower;
+
+                //上方向に力を加える
                 JumpPos = transform.position.y;
                 JumpTime = 0.0f;
             }
+            //ジャンプしている間
             if (isjump)
             {
                 field = false;
+
+                //時間経過でジャンプ力を操作
                 ySpeed *= jumpCurve.Evaluate(JumpTime);
                 bool canTime = JumpLimitTime > JumpTime;
+
+                //ジャンプの高さに上限設定
                 if (JumpPos + JumpHeight > transform.position.y&&canTime)
                 {
                     ySpeed = JumpingPower;
@@ -121,11 +146,13 @@ public class Player : MonoBehaviour
                 isjump = false;
             }
         }
+        //移動実行
         RB.velocity = new Vector2(xSpeed, ySpeed);
     }
 
     public void OnCollisionEnter2D(Collision2D coll)
     {
+        //衝突したオブジェクトのタグで処理分岐
         switch (coll.gameObject.tag)
         {
             case "Enemy":
@@ -137,6 +164,7 @@ public class Player : MonoBehaviour
             case "Clear":
                 if (stageNo == 1)
                 {
+                    //指定のメソッドを実行
                     gmanager.Cleartext();
                     gmanager.ClearRecord();
                 }
@@ -150,6 +178,7 @@ public class Player : MonoBehaviour
                 break;
             case "Car":
                 field = true;
+                //プレイヤーを車の子オブジェクトにする
                 transform.SetParent(coll.transform);
                 break;
         }
@@ -159,6 +188,7 @@ public class Player : MonoBehaviour
         switch(collision.gameObject.tag)
         {
             case "Fish":
+                //取得した魚の数をプラス
                 gmanager.fishcount++;
                 gmanager.FishSE();
                 break;
@@ -185,6 +215,7 @@ public class Player : MonoBehaviour
         switch (collision.gameObject.tag)
         {
             case "Car":
+                //子オブジェクトを解除する
                 transform.SetParent(null);
                 break;
         }
